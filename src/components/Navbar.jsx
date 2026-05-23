@@ -1,29 +1,25 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-function Navbar({ setCurrentPage }) {
+function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
-
-  const handleNavigation = (page) => {
-    setCurrentPage(page)
-    setMenuOpen(false)
-  }
 
   return (
     <nav className="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <div onClick={() => handleNavigation('home')} className="cursor-pointer">
+          <Link to="/" className="cursor-pointer">
             <h1 className="text-2xl font-bold flex items-center gap-2">
               📚 Student Management System
             </h1>
             <p className="text-sm opacity-90 hidden sm:block">
               Manage student records easily
             </p>
-          </div>
+          </Link>
 
           <div className="hidden md:flex gap-6">
-            <button onClick={() => handleNavigation('home')} className="hover:text-indigo-200 transition">Dashboard</button>
-            <button onClick={() => handleNavigation('students')} className="hover:text-indigo-200 transition">Students</button>
+            <Link to="/" className="hover:text-indigo-200 transition">Dashboard</Link>
+            <Link to="/students" className="hover:text-indigo-200 transition">Students</Link>
             <button className="hover:text-indigo-200 transition">Courses</button>
             <button className="hover:text-indigo-200 transition">Attendance</button>
             <button className="hover:text-indigo-200 transition">Reports</button>
@@ -43,8 +39,8 @@ function Navbar({ setCurrentPage }) {
         {menuOpen && (
           <div className="md:hidden mt-4 pt-4 border-t border-indigo-500">
             <div className="flex flex-col gap-3">
-              <button onClick={() => handleNavigation('home')} className="hover:text-indigo-200 transition py-1 text-left">Dashboard</button>
-              <button onClick={() => handleNavigation('students')} className="hover:text-indigo-200 transition py-1 text-left">Students</button>
+              <Link to="/" className="hover:text-indigo-200 transition py-1" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link to="/students" className="hover:text-indigo-200 transition py-1" onClick={() => setMenuOpen(false)}>Students</Link>
               <button className="hover:text-indigo-200 transition py-1 text-left">Courses</button>
               <button className="hover:text-indigo-200 transition py-1 text-left">Attendance</button>
               <button className="hover:text-indigo-200 transition py-1 text-left">Reports</button>
