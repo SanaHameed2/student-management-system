@@ -4,7 +4,6 @@ import { useStudents } from '../context/StudentContext'
 function Reports() {
   const { students } = useStudents()
 
-  // Grade distribution
   const gradeDistribution = {
     'A+': 0, 'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'D': 0, 'F': 0
   }
@@ -14,7 +13,6 @@ function Reports() {
     }
   })
 
-  // Course distribution
   const courseDistribution = {}
   students.forEach(s => {
     if (s.course) {
@@ -39,11 +37,8 @@ function Reports() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        📊 Reports & Analytics
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Reports & Analytics</h2>
 
-      {/* Overall Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-8">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
           <p className="text-2xl font-bold">{students.length}</p>
@@ -67,10 +62,9 @@ function Reports() {
         </div>
       </div>
 
-      {/* Grade Distribution Table */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-8">
         <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">📈 Grade Distribution</h3>
+          <h3 className="font-bold">Grade Distribution</h3>
         </div>
         <div className="p-4">
           <table className="w-full">
@@ -96,10 +90,9 @@ function Reports() {
         </div>
       </div>
 
-      {/* Course Distribution */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-8">
         <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">📚 Course Distribution</h3>
+          <h3 className="font-bold">Course Distribution</h3>
         </div>
         <div className="p-4">
           <div className="space-y-3">
@@ -118,10 +111,9 @@ function Reports() {
         </div>
       </div>
 
-      {/* Student List Summary */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">👨‍🎓 Student Performance Summary</h3>
+          <h3 className="font-bold">Student Performance Summary</h3>
         </div>
         <div className="p-4 overflow-x-auto">
           <table className="w-full">
@@ -147,7 +139,7 @@ function Reports() {
                   </td>
                   <td className={`p-2 ${getPerformanceColor(student.grade)}`}>
                     {student.grade ? getPerformanceLevel(student.grade) : 'N/A'}
-                  </td>
+                   </td>
                 </tr>
               ))}
             </tbody>
