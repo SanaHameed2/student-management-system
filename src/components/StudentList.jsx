@@ -11,8 +11,13 @@ function StudentList() {
   const [isEditing, setIsEditing] = useState(false)
   const [editId, setEditId] = useState(null)
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', course: '' })
+  
+  // Search states
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterCourse, setFilterCourse] = useState('')
+  const [filterGrade, setFilterGrade] = useState('')
 
-  // Load from localStorage on page load
+  // Load from localStorage
   useEffect(() => {
     const savedStudents = localStorage.getItem('students')
     if (savedStudents) {
@@ -20,10 +25,23 @@ function StudentList() {
     }
   }, [])
 
-  // Save to localStorage whenever students change
+  // Save to localStorage
   useEffect(() => {
     localStorage.setItem('students', JSON.stringify(students))
   }, [students])
+
+  // Get unique courses for filter dropdown
+  const uniqueCourses = [...new Set(students.map(s => s.course).filter(Boolean))]
+  const uniqueGrades = [...new Set(students.map(s => s.grade).filter(Boolean))]
+
+  // Filter students based on search and filters
+  const filteredStudents = students.filter(student => {
+    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          student.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCourse = filterCourse === '' || student.course === filterCourse
+    const matchesGrade = filterGrade === '' || student.grade === filterGrade
+    return matchesSearch && matchesCourse && matchesGrade
+  })
 
   const addStudent = () => {
     if (newStudent.name && newStudent.email) {
@@ -79,12 +97,20 @@ function StudentList() {
     setNewStudent({ name: '', email: '', grade: '', course: '' })
   }
 
+  const clearFilters = () => {
+    setSearchTerm('')
+    setFilterCourse('')
+    setFilterGrade('')
+  }
+
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Student Management System</h2>
-          <p className="text-sm text-gray-500 mt-1">Total Students: {students.length}</p>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Student Management System</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Total Students: {students.length} | Showing: {filteredStudents.length}
+          </p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -94,37 +120,76 @@ function StudentList() {
         </button>
       </div>
 
+      {/* Search and Filter Bar */}
+      <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <input
+            type="text"
+            placeholder="🔍 Search by name or email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
+          />
+          <select
+            value={filterCourse}
+            onChange={(e) => setFilterCourse(e.target.value)}
+            className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
+          >
+            <option value="">All Courses</option>
+            {uniqueCourses.map(course => (
+              <option key={course} value={course}>{course}</option>
+            ))}
+          </select>
+          <select
+            value={filterGrade}
+            onChange={(e) => setFilterGrade(e.target.value)}
+            className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
+          >
+            <option value="">All Grades</option>
+            {uniqueGrades.map(grade => (
+              <option key={grade} value={grade}>{grade}</option>
+            ))}
+          </select>
+          <button
+            onClick={clearFilters}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+
       {showForm && (
-        <div className="bg-gray-50 p-6 rounded-lg mb-6 border border-gray-200">
-          <h3 className="text-lg font-semibold mb-4">
+        <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
             {isEditing ? '✏️ Edit Student' : '➕ Add New Student'}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input 
               type="text" 
               placeholder="Full Name" 
-              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
               value={newStudent.name} 
               onChange={(e) => setNewStudent({...newStudent, name: e.target.value})} 
             />
             <input 
               type="email" 
               placeholder="Email" 
-              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
               value={newStudent.email} 
               onChange={(e) => setNewStudent({...newStudent, email: e.target.value})} 
             />
             <input 
               type="text" 
               placeholder="Grade (A, A+, B, etc.)" 
-              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
               value={newStudent.grade} 
               onChange={(e) => setNewStudent({...newStudent, grade: e.target.value})} 
             />
             <input 
               type="text" 
               placeholder="Course" 
-              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
               value={newStudent.course} 
               onChange={(e) => setNewStudent({...newStudent, course: e.target.value})} 
             />
@@ -147,8 +212,8 @@ function StudentList() {
       )}
 
       <div className="overflow-x-auto">
-        <table className="w-full bg-white rounded-lg shadow">
-          <thead className="bg-gray-800 text-white">
+        <table className="w-full bg-white dark:bg-gray-800 rounded-lg shadow">
+          <thead className="bg-gray-800 dark:bg-gray-900 text-white">
             <tr>
               <th className="p-3 text-left">ID</th>
               <th className="p-3 text-left">Name</th>
@@ -159,21 +224,21 @@ function StudentList() {
             </tr>
           </thead>
           <tbody>
-            {students.length === 0 ? (
+            {filteredStudents.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center p-8 text-gray-500">
-                  No students found. Click "Add Student" to add your first student!
+                <td colSpan="6" className="text-center p-8 text-gray-500 dark:text-gray-400">
+                  No students found. Try changing filters or add a new student!
                 </td>
               </tr>
             ) : (
-              students.map(student => (
-                <tr key={student.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{student.id}</td>
-                  <td className="p-3 font-medium">{student.name}</td>
-                  <td className="p-3">{student.email}</td>
-                  <td className="p-3">{student.course}</td>
+              filteredStudents.map(student => (
+                <tr key={student.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td className="p-3 text-gray-800 dark:text-white">{student.id}</td>
+                  <td className="p-3 font-medium text-gray-800 dark:text-white">{student.name}</td>
+                  <td className="p-3 text-gray-600 dark:text-gray-300">{student.email}</td>
+                  <td className="p-3 text-gray-600 dark:text-gray-300">{student.course}</td>
                   <td className="p-3">
-                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-medium">
+                    <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded text-sm font-medium">
                       {student.grade || 'N/A'}
                     </span>
                   </td>
