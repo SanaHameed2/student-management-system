@@ -43,7 +43,7 @@ function GradeCalculator() {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">🎓 Grade Calculator</h2>
+      <h2 className="text-2xl font-bold mb-6">Grade Calculator</h2>
       
       <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6">
         {subjectNames.map((name, idx) => (
