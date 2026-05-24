@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Toast from './Toast'
 
 function StudentList() {
   const [students, setStudents] = useState([
@@ -11,13 +12,16 @@ function StudentList() {
   const [isEditing, setIsEditing] = useState(false)
   const [editId, setEditId] = useState(null)
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', course: '' })
+  const [toast, setToast] = useState(null)
   
-  // Search states
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCourse, setFilterCourse] = useState('')
   const [filterGrade, setFilterGrade] = useState('')
 
-  // Load from localStorage
+  const showToast = (message, type) => {
+    setToast({ message, type })
+  }
+
   useEffect(() => {
     const savedStudents = localStorage.getItem('students')
     if (savedStudents) {
@@ -25,16 +29,13 @@ function StudentList() {
     }
   }, [])
 
-  // Save to localStorage
   useEffect(() => {
     localStorage.setItem('students', JSON.stringify(students))
   }, [students])
 
-  // Get unique courses for filter dropdown
   const uniqueCourses = [...new Set(students.map(s => s.course).filter(Boolean))]
   const uniqueGrades = [...new Set(students.map(s => s.grade).filter(Boolean))]
 
-  // Filter students based on search and filters
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           student.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -43,12 +44,43 @@ function StudentList() {
     return matchesSearch && matchesCourse && matchesGrade
   })
 
+  const exportToCSV = () => {
+    const headers = ['ID', 'Name', 'Email', 'Course', 'Grade']
+    const rows = filteredStudents.map(student => [
+      student.id,
+      student.name,
+      student.email,
+      student.course,
+      student.grade || 'N/A'
+    ])
+    
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n')
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `students_${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    
+    showToast(`✅ ${filteredStudents.length} students exported successfully!`, 'success')
+  }
+
   const addStudent = () => {
     if (newStudent.name && newStudent.email) {
       const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1
       setStudents([...students, { ...newStudent, id: newId }])
       setNewStudent({ name: '', email: '', grade: '', course: '' })
       setShowForm(false)
+      showToast(`✅ ${newStudent.name} added successfully!`, 'success')
+    } else {
+      showToast('❌ Please fill all required fields!', 'error')
     }
   }
 
@@ -76,17 +108,22 @@ function StudentList() {
       setIsEditing(false)
       setEditId(null)
       setShowForm(false)
+      showToast(`✏️ ${newStudent.name} updated successfully!`, 'success')
+    } else {
+      showToast('❌ Please fill all required fields!', 'error')
     }
   }
 
   const deleteStudent = (id) => {
-    if (window.confirm('Are you sure you want to delete this student?')) {
-      const filteredStudents = students.filter(student => student.id !== id)
-      const reindexedStudents = filteredStudents.map((student, index) => ({
+    const studentToDelete = students.find(s => s.id === id)
+    if (window.confirm(`Are you sure you want to delete ${studentToDelete?.name}?`)) {
+      const filtered = students.filter(student => student.id !== id)
+      const reindexed = filtered.map((student, index) => ({
         ...student,
         id: index + 1
       }))
-      setStudents(reindexedStudents)
+      setStudents(reindexed)
+      showToast(`🗑️ ${studentToDelete?.name} deleted successfully!`, 'success')
     }
   }
 
@@ -101,10 +138,19 @@ function StudentList() {
     setSearchTerm('')
     setFilterCourse('')
     setFilterGrade('')
+    showToast('🧹 Filters cleared!', 'info')
   }
 
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Student Management System</h2>
@@ -112,15 +158,16 @@ function StudentList() {
             Total Students: {students.length} | Showing: {filteredStudents.length}
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          {showForm ? 'Cancel' : '+ Add Student'}
-        </button>
+        <div className="flex gap-3">
+          <button onClick={exportToCSV} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+            📊 Export to CSV
+          </button>
+          <button onClick={() => setShowForm(!showForm)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            {showForm ? 'Cancel' : '+ Add Student'}
+          </button>
+        </div>
       </div>
 
-      {/* Search and Filter Bar */}
       <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
@@ -150,10 +197,7 @@ function StudentList() {
               <option key={grade} value={grade}>{grade}</option>
             ))}
           </select>
-          <button
-            onClick={clearFilters}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-          >
+          <button onClick={clearFilters} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
             Clear Filters
           </button>
         </div>
@@ -195,16 +239,10 @@ function StudentList() {
             />
           </div>
           <div className="mt-4 flex gap-3">
-            <button 
-              onClick={isEditing ? updateStudent : addStudent} 
-              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
-            >
+            <button onClick={isEditing ? updateStudent : addStudent} className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
               {isEditing ? '💾 Update Student' : '💾 Save Student'}
             </button>
-            <button 
-              onClick={cancelForm} 
-              className="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 transition"
-            >
+            <button onClick={cancelForm} className="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 transition">
               Cancel
             </button>
           </div>
@@ -244,16 +282,10 @@ function StudentList() {
                   </td>
                   <td className="p-3">
                     <div className="flex gap-2">
-                      <button 
-                        onClick={() => editStudent(student)} 
-                        className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm transition"
-                      >
+                      <button onClick={() => editStudent(student)} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm transition">
                         ✏️ Edit
                       </button>
-                      <button 
-                        onClick={() => deleteStudent(student.id)} 
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm transition"
-                      >
+                      <button onClick={() => deleteStudent(student.id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm transition">
                         🗑️ Delete
                       </button>
                     </div>
