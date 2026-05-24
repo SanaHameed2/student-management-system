@@ -37,8 +37,8 @@ function Home() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl text-white p-8 mb-8">
-        <h1 className="text-3xl font-bold mb-4">Welcome to Student Management System! 🎓</h1>
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl text-white p-8 mb-8">
+        <h1 className="text-3xl font-bold mb-4">Welcome to Student Management System</h1>
         <p className="text-lg">Manage your students, courses, attendance, and grades all in one place.</p>
       </div>
 
@@ -47,22 +47,22 @@ function Home() {
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <div className="text-3xl mb-3">👨‍🎓</div>
           <h3 className="font-bold text-lg mb-2">Total Students</h3>
-          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{students.length}</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{students.length}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <div className="text-3xl mb-3">📚</div>
           <h3 className="font-bold text-lg mb-2">Active Courses</h3>
-          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{courseData.length}</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{courseData.length}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <div className="text-3xl mb-3">🎓</div>
-          <h3 className="font-bold text-lg mb-2">Avg. Grade</h3>
-          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">A-</p>
+          <h3 className="font-bold text-lg mb-2">Average Grade</h3>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">A-</p>
         </div>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <div className="text-3xl mb-3">✅</div>
+          <div className="text-3xl mb-3">📊</div>
           <h3 className="font-bold text-lg mb-2">Attendance Rate</h3>
-          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">92%</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">92%</p>
         </div>
       </div>
 
@@ -96,18 +96,15 @@ function Home() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid md:grid-cols-4 gap-4">
-        <button onClick={() => navigate('/students')} className="bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition">
-          ➕ Add Student
+      <div className="grid md:grid-cols-3 gap-4">
+        <button onClick={() => navigate('/students')} className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition">
+          Add Student
         </button>
         <button onClick={() => navigate('/attendance')} className="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition">
-          📅 Take Attendance
+          Take Attendance
         </button>
-        <button onClick={() => navigate('/grade-calculator')} className="bg-yellow-600 text-white px-4 py-3 rounded-lg hover:bg-yellow-700 transition">
-          🎓 Grade Calculator
-        </button>
-        <button onClick={() => navigate('/profile')} className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition">
-          👤 Student Profile
+        <button onClick={() => navigate('/grade-calculator')} className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition">
+          Grade Calculator
         </button>
       </div>
     </div>
