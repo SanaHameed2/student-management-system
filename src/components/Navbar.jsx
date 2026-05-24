@@ -18,18 +18,21 @@ function Navbar() {
             </p>
           </Link>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex gap-6 items-center">
             <Link to="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Dashboard</Link>
             <Link to="/students" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Students</Link>
-            <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Courses</button>
-            <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Attendance</button>
-            <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Reports</button>
+            <Link to="/attendance" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Attendance</Link>
+            <Link to="/grade-calculator" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Grade Calculator</Link>
+            <Link to="/courses" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Courses</Link>
+            <Link to="/reports" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Reports</Link>
             <DarkModeToggle />
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="flex gap-3 items-center md:hidden">
             <DarkModeToggle />
-            <button className="text-white focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
+            <button className="text-gray-800 dark:text-white focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {menuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -41,14 +44,16 @@ function Navbar() {
           </div>
         </div>
 
+        {/* Mobile Dropdown Menu */}
         {menuOpen && (
           <div className="md:hidden mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col gap-3">
               <Link to="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Dashboard</Link>
               <Link to="/students" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Students</Link>
-              <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1 text-left">Courses</button>
-              <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1 text-left">Attendance</button>
-              <button className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1 text-left">Reports</button>
+              <Link to="/attendance" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Attendance</Link>
+              <Link to="/grade-calculator" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Grade Calculator</Link>
+              <Link to="/courses" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Courses</Link>
+              <Link to="/reports" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition py-1" onClick={() => setMenuOpen(false)}>Reports</Link>
             </div>
           </div>
         )}

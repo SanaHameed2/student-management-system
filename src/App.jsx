@@ -5,6 +5,10 @@ import { DarkModeProvider } from './context/DarkModeContext'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import StudentList from './components/StudentList'
+import Attendance from './components/Attendance'
+import GradeCalculator from './components/GradeCalculator'
+import Courses from './pages/Courses'
+import Reports from './pages/Reports'
 import './index.css'
 
 function App() {
@@ -17,6 +21,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/students" element={<StudentList />} />
+              <Route path="/attendance" element={<Attendance />} />
+              <Route path="/grade-calculator" element={<GradeCalculator />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/reports" element={<Reports />} />
             </Routes>
           </div>
         </div>

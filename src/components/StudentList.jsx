@@ -72,6 +72,39 @@ function StudentList() {
     showToast(`✅ ${filteredStudents.length} students exported successfully!`, 'success')
   }
 
+  const importFromCSV = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target.result
+      const rows = text.split('\n').slice(1)
+      const newStudents = []
+      rows.forEach(row => {
+        const cols = row.split(',')
+        if (cols.length >= 5 && cols[1]) {
+          const maxId = students.length > 0 ? Math.max(...students.map(s => s.id)) : 0
+          newStudents.push({
+            id: maxId + newStudents.length + 1,
+            name: cols[1]?.trim(),
+            email: cols[2]?.trim(),
+            course: cols[3]?.trim(),
+            grade: cols[4]?.trim()
+          })
+        }
+      })
+      if (newStudents.length > 0) {
+        setStudents([...students, ...newStudents])
+        showToast(`📥 ${newStudents.length} students imported successfully!`, 'success')
+      } else {
+        showToast('❌ No valid students found in CSV!', 'error')
+      }
+      event.target.value = ''
+    }
+    reader.readAsText(file)
+  }
+
   const addStudent = () => {
     if (newStudent.name && newStudent.email) {
       const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1
@@ -159,6 +192,21 @@ function StudentList() {
           </p>
         </div>
         <div className="flex gap-3">
+          {/* Import CSV Button */}
+          <input
+            type="file"
+            accept=".csv"
+            onChange={importFromCSV}
+            className="hidden"
+            id="csvInput"
+          />
+          <label
+            htmlFor="csvInput"
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-purple-700 transition flex items-center gap-2"
+          >
+            📥 Import CSV
+          </label>
+          
           <button onClick={exportToCSV} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2">
             📊 Export to CSV
           </button>
