@@ -4,7 +4,6 @@ import { useStudents } from '../context/StudentContext'
 function Courses() {
   const { students } = useStudents()
 
-  // Get all unique courses with student counts
   const courseStats = {}
   students.forEach(student => {
     if (student.course) {
@@ -24,7 +23,6 @@ function Courses() {
 
   const courses = Object.values(courseStats)
 
-  // Calculate average grade for a course
   const getAverageGrade = (grades) => {
     if (grades.length === 0) return 'N/A'
     const gradePoints = { 'A+': 4.0, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'D': 1.0, 'F': 0 }
@@ -45,9 +43,7 @@ function Courses() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        📚 All Courses
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">All Courses</h2>
 
       {courses.length === 0 ? (
         <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-lg text-center">
@@ -85,10 +81,9 @@ function Courses() {
         </div>
       )}
 
-      {/* Summary Section */}
       {courses.length > 0 && (
         <div className="mt-8 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
-          <h3 className="text-lg font-bold mb-4">📊 Course Summary</h3>
+          <h3 className="text-lg font-bold mb-4">Course Summary</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-blue-600">{courses.length}</p>
@@ -108,7 +103,7 @@ function Courses() {
               <p className="text-2xl font-bold text-orange-600">
                 {(courses.reduce((sum, c) => sum + c.count, 0) / courses.length).toFixed(1)}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Avg per Course</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Average per Course</p>
             </div>
           </div>
         </div>
