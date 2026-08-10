@@ -29,60 +29,60 @@ function Reports() {
   }
 
   const getPerformanceColor = (grade) => {
-    if (grade === 'A+' || grade === 'A') return 'text-green-600'
-    if (grade === 'B+' || grade === 'B') return 'text-blue-600'
-    if (grade === 'C+' || grade === 'C') return 'text-yellow-600'
-    return 'text-red-600'
+    if (grade === 'A+' || grade === 'A') return 'text-emerald-600 dark:text-emerald-400 font-semibold'
+    if (grade === 'B+' || grade === 'B') return 'text-indigo-600 dark:text-indigo-400 font-semibold'
+    if (grade === 'C+' || grade === 'C') return 'text-amber-600 dark:text-amber-400 font-semibold'
+    return 'text-rose-600 dark:text-rose-400 font-semibold'
   }
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Reports & Analytics</h2>
+    <div className="p-6 max-w-7xl mx-auto">
+      <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6">Reports & Analytics</h2>
 
       <div className="grid md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
-          <p className="text-2xl font-bold">{students.length}</p>
-          <p className="text-sm opacity-90">Total Students</p>
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-5 rounded-2xl shadow-sm">
+          <p className="text-3xl font-extrabold">{students.length}</p>
+          <p className="text-xs opacity-90 mt-1 uppercase tracking-wider font-medium">Total Students</p>
         </div>
-        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
-          <p className="text-2xl font-bold">{Object.keys(courseDistribution).length}</p>
-          <p className="text-sm opacity-90">Active Courses</p>
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-5 rounded-2xl shadow-sm">
+          <p className="text-3xl font-extrabold">{Object.keys(courseDistribution).length}</p>
+          <p className="text-xs opacity-90 mt-1 uppercase tracking-wider font-medium">Active Courses</p>
         </div>
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-lg">
-          <p className="text-2xl font-bold">
+        <div className="bg-gradient-to-r from-purple-500 to-violet-600 text-white p-5 rounded-2xl shadow-sm">
+          <p className="text-3xl font-extrabold">
             {Object.values(gradeDistribution).filter(v => v > 0).length}
           </p>
-          <p className="text-sm opacity-90">Grade Levels</p>
+          <p className="text-xs opacity-90 mt-1 uppercase tracking-wider font-medium">Grade Levels</p>
         </div>
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-lg">
-          <p className="text-2xl font-bold">
+        <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-5 rounded-2xl shadow-sm">
+          <p className="text-3xl font-extrabold">
             {students.filter(s => s.grade === 'A+' || s.grade === 'A').length}
           </p>
-          <p className="text-sm opacity-90">Excellent Students</p>
+          <p className="text-xs opacity-90 mt-1 uppercase tracking-wider font-medium">Excellent Students</p>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-8">
-        <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">Grade Distribution</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8 overflow-hidden">
+        <div className="bg-gray-900 text-white px-6 py-4">
+          <h3 className="font-bold text-sm tracking-wide">Grade Distribution</h3>
         </div>
-        <div className="p-4">
-          <table className="w-full">
+        <div className="p-6">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b">
-                <th className="text-left p-2">Grade</th>
-                <th className="text-left p-2">Students</th>
-                <th className="text-left p-2">Percentage</th>
-                <th className="text-left p-2">Performance</th>
+              <tr className="border-b border-gray-100 dark:border-gray-700 text-xs uppercase text-gray-400 font-bold">
+                <th className="pb-3 pl-2">Grade</th>
+                <th className="pb-3">Students</th>
+                <th className="pb-3">Percentage</th>
+                <th className="pb-3">Performance</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
               {Object.entries(gradeDistribution).filter(([_, count]) => count > 0).map(([grade, count]) => (
-                <tr key={grade} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="p-2 font-bold">{grade}</td>
-                  <td className="p-2">{count}</td>
-                  <td className="p-2">{((count / students.length) * 100).toFixed(1)}%</td>
-                  <td className={`p-2 ${getPerformanceColor(grade)}`}>{getPerformanceLevel(grade)}</td>
+                <tr key={grade} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition">
+                  <td className="py-3.5 pl-2 font-bold text-gray-900 dark:text-white">{grade}</td>
+                  <td className="py-3.5 text-gray-700 dark:text-gray-300">{count}</td>
+                  <td className="py-3.5 text-gray-700 dark:text-gray-300">{((count / (students.length || 1)) * 100).toFixed(1)}%</td>
+                  <td className={`py-3.5 ${getPerformanceColor(grade)}`}>{getPerformanceLevel(grade)}</td>
                 </tr>
               ))}
             </tbody>
@@ -90,20 +90,20 @@ function Reports() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-8">
-        <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">Course Distribution</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8 overflow-hidden">
+        <div className="bg-gray-900 text-white px-6 py-4">
+          <h3 className="font-bold text-sm tracking-wide">Course Distribution</h3>
         </div>
-        <div className="p-4">
-          <div className="space-y-3">
+        <div className="p-6">
+          <div className="space-y-4">
             {Object.entries(courseDistribution).map(([course, count]) => (
               <div key={course}>
-                <div className="flex justify-between mb-1">
-                  <span>{course}</span>
-                  <span>{count} students</span>
+                <div className="flex justify-between mb-1.5 text-xs font-semibold">
+                  <span className="text-gray-700 dark:text-gray-300">{course}</span>
+                  <span className="text-gray-400">{count} students</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(count / students.length) * 100}%` }}></div>
+                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${(count / (students.length || 1)) * 100}%` }}></div>
                 </div>
               </div>
             ))}
@@ -111,33 +111,33 @@ function Reports() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <div className="bg-gray-800 text-white p-4 rounded-t-lg">
-          <h3 className="font-bold">Student Performance Summary</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div className="bg-gray-900 text-white px-6 py-4">
+          <h3 className="font-bold text-sm tracking-wide">Student Performance Summary</h3>
         </div>
-        <div className="p-4 overflow-x-auto">
-          <table className="w-full">
+        <div className="p-6 overflow-x-auto">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b">
-                <th className="text-left p-2">ID</th>
-                <th className="text-left p-2">Name</th>
-                <th className="text-left p-2">Course</th>
-                <th className="text-left p-2">Grade</th>
-                <th className="text-left p-2">Performance</th>
+              <tr className="border-b border-gray-100 dark:border-gray-700 text-xs uppercase text-gray-400 font-bold">
+                <th className="pb-3 pl-2">ID</th>
+                <th className="pb-3">Name</th>
+                <th className="pb-3">Course</th>
+                <th className="pb-3">Grade</th>
+                <th className="pb-3">Performance</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
               {students.map(student => (
-                <tr key={student.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="p-2">{student.id}</td>
-                  <td className="p-2 font-medium">{student.name}</td>
-                  <td className="p-2">{student.course || 'N/A'}</td>
-                  <td className="p-2">
-                    <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
+                <tr key={student.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition">
+                  <td className="py-3.5 pl-2 font-semibold text-gray-500">#{student.id}</td>
+                  <td className="py-3.5 font-bold text-gray-900 dark:text-white">{student.name}</td>
+                  <td className="py-3.5 text-gray-600 dark:text-gray-300">{student.course || 'N/A'}</td>
+                  <td className="py-3.5">
+                    <span className="bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold">
                       {student.grade || 'N/A'}
                     </span>
                   </td>
-                  <td className={`p-2 ${getPerformanceColor(student.grade)}`}>
+                  <td className={`py-3.5 ${getPerformanceColor(student.grade)}`}>
                     {student.grade ? getPerformanceLevel(student.grade) : 'N/A'}
                    </td>
                 </tr>
