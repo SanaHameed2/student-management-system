@@ -82,8 +82,8 @@ function Navbar() {
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-[235px] flex-col bg-[#3f6573] dark:bg-[#172b33] px-5 py-6 text-white">
+      {/* Desktop Sidebar - FIXED */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-50 w-[235px] flex-col bg-[#3f6573] dark:bg-[#172b33] px-5 py-6 text-white">
         
         {/* Brand */}
         <div className="px-3 mb-10">

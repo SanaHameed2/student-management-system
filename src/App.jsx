@@ -15,18 +15,26 @@ function App() {
   return (
     <DarkModeProvider>
       <StudentProvider>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <div className="min-h-screen bg-[#eef3f4] dark:bg-[#111d22]">
+
           <Navbar />
-          <div className="container mx-auto px-4 py-8">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/students" element={<StudentList />} />
-              <Route path="/attendance" element={<Attendance />} />
-              <Route path="/grade-calculator" element={<GradeCalculator />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/reports" element={<Reports />} />
-            </Routes>
-          </div>
+
+          <main className="lg:ml-[235px] min-h-screen w-auto">
+            <div className="w-full max-w-[1450px] mx-auto px-5 py-6 sm:px-7 lg:px-9">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/students" element={<StudentList />} />
+                <Route path="/attendance" element={<Attendance />} />
+                <Route
+                  path="/grade-calculator"
+                  element={<GradeCalculator />}
+                />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/reports" element={<Reports />} />
+              </Routes>
+            </div>
+          </main>
+
         </div>
       </StudentProvider>
     </DarkModeProvider>
